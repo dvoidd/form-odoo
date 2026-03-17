@@ -1,0 +1,49 @@
+<odoo>
+
+    <data>
+
+        <record id="view_academic_session_tree" model="ir.ui.view">
+            <field name="name">view_academic_session_tree</field>
+            <field name="model">academic.session</field>
+            <field name="type">list</field>
+            <field name="arch" type="xml">
+
+                <list string="session">
+                    <field name="name" />
+                    <field name="course_id" />
+                    <field name="instructor_id" />
+                    <field name="start_date" />
+                    <field name="duration" />
+                    <field name="seats" />
+                    <field name="active" />
+                </list>
+
+            </field>
+        </record>
+        <record id="view_academic_session_form" model="ir.ui.view">
+            <field name="name">view_academic_session_form</field>
+            <field name="model">academic.session</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+
+                <form string="session">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="course_id" />
+                            <field name="instructor_id" />
+                            <field name="start_date" />
+                            <field name="duration" />
+                            <field name="seats" />
+                            <field name="active" />
+                        </group>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+    </data>
+
+
+</odoo>

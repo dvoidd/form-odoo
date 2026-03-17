@@ -1,0 +1,18 @@
+# Abaikan folder cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Abaikan folder database lokal (jika ada folder data postgres/odoo)
+# Sesuaikan dengan nama folder volume lokal Anda jika ada
+/db_data/
+/odoo_data/
+/log/
+*.log
+
+# Abaikan file environment/rahasia
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db

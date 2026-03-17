@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_training_proposal_form" model="ir.ui.view">
+        <field name="name">training.proposal.form</field>
+        <field name="model">training.proposal</field>
+        <field name="arch" type="xml">
+            <form string="Proposal Pengajuan">
+                <header>
+                    <button name="action_approve" string="Setujui" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_reject" string="Tolak" type="object" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Set ke Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="proposal_number" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="description"/>
+                            <field name="submitted_by"/>
+                            <field name="department"/>
+                        </group>
+                        <group>
+                            <field name="payment_schedule"/>
+                            <field name="execution_schedule"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Narasi Proposal">
+                            <group>
+                                <field name="introduction"/>
+                                <field name="background"/>
+                                <field name="objective"/>
+                                <field name="solution"/>
+                            </group>
+                        </page>
+                        <page string="Permintaan Biaya">
+                            <field name="cost_line_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal" readonly="1" force_save="1"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="proposal_total">
+                                <field name="total_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_in_words"/>
+                            </group>
+                            <div class="oe_clear"/>
+                        </page>
+                        <page string="Daftar Peserta">
+                            <field name="participant_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="employee_id"/>
+                                    <field name="position"/>
+                                    <field name="department"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Persetujuan &amp; Catatan">
+                            <group>
+                                <field name="general_notes"/>
+                            </group>
+                            <p class="text-muted">Proses otorisasi (Created By, Known By, Verified By, Approved By) direkam melalui log sistem dan perubahan status di atas.</p>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_training_proposal_tree" model="ir.ui.view">
+        <field name="name">training.proposal.tree</field>
+        <field name="model">training.proposal</field>
+        <field name="arch" type="xml">
+            <list string="Proposal Pengajuan">
+                <field name="proposal_number"/>
+                <field name="description"/>
+                <field name="submitted_by"/>
+                <field name="department"/>
+                <field name="total_cost"/>
+                <field name="state" widget="badge" decoration-success="state == 'approved'" decoration-danger="state == 'rejected'" decoration-info="state == 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_training_proposal" model="ir.actions.act_window">
+        <field name="name">Proposal Training</field>
+        <field name="res_model">training.proposal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Move to education_request root menu -->
+    <menuitem id="menu_training_proposal_main" name="Proposal Training" parent="education_request.menu_education_request_root" action="action_training_proposal" sequence="20"/>
+</odoo>
