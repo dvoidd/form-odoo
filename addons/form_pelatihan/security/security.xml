@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="module_category_form_pelatihan" model="ir.module.category">
+            <field name="name">Form Pelatihan</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_user_request" model="res.groups">
+            <field name="name">User Request</field>
+            <field name="category_id" ref="module_category_form_pelatihan"/>
+        </record>
+        <record id="group_hod" model="res.groups">
+            <field name="name">HOD</field>
+            <field name="category_id" ref="module_category_form_pelatihan"/>
+        </record>
+        <record id="group_hr" model="res.groups">
+            <field name="name">HR</field>
+            <field name="category_id" ref="module_category_form_pelatihan"/>
+        </record>
+        <record id="group_fat" model="res.groups">
+            <field name="name">FAT</field>
+            <field name="category_id" ref="module_category_form_pelatihan"/>
+        </record>
+        <record id="group_gm" model="res.groups">
+            <field name="name">GM</field>
+            <field name="category_id" ref="module_category_form_pelatihan"/>
+        </record>
+        <record id="group_direksi" model="res.groups">
+            <field name="name">Direksi</field>
+            <field name="category_id" ref="module_category_form_pelatihan"/>
+        </record>
+    </data>
+</odoo>

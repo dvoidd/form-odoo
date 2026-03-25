@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Course Form View -->
     <record id="view_academic_course_form" model="ir.ui.view">
         <field name="name">academic.course.form</field>
         <field name="model">academic.course</field>
@@ -20,8 +21,17 @@
                             <field name="session_ids">
                                 <list>
                                     <field name="name"/>
+                                    <field name="instructor_id"/>
                                     <field name="start_date"/>
+                                    <field name="end_date"/>
                                     <field name="duration"/>
+                                    <field name="seats"/>
+                                    <field name="attendees_count" string="Attendees"/>
+                                    <field name="state"
+                                           widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'confirmed'"
+                                           decoration-muted="state == 'done'"/>
                                 </list>
                             </field>
                         </page>
@@ -31,6 +41,7 @@
         </field>
     </record>
 
+    <!-- Course List View -->
     <record id="view_academic_course_list" model="ir.ui.view">
         <field name="name">academic.course.list</field>
         <field name="model">academic.course</field>
@@ -42,32 +53,83 @@
         </field>
     </record>
 
-    <record id="view_academic_session_form" model="ir.ui.view">
-        <field name="name">academic.session.form</field>
-        <field name="model">academic.session</field>
+    <!-- Course Search View -->
+    <record id="view_academic_course_search" model="ir.ui.view">
+        <field name="name">academic.course.search</field>
+        <field name="model">academic.course</field>
         <field name="arch" type="xml">
-            <form string="Session">
+            <search string="Search Courses">
+                <field name="name"/>
+                <field name="responsible_id"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Attendee List View -->
+    <record id="view_academic_attendee_list" model="ir.ui.view">
+        <field name="name">academic.attendee.list</field>
+        <field name="model">academic.attendee</field>
+        <field name="arch" type="xml">
+            <list string="Attendees" editable="bottom">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Attendee Form View -->
+    <record id="view_academic_attendee_form" model="ir.ui.view">
+        <field name="name">academic.attendee.form</field>
+        <field name="model">academic.attendee</field>
+        <field name="arch" type="xml">
+            <form string="Attendee">
                 <sheet>
                     <group>
-                        <group>
-                            <field name="name"/>
-                            <field name="course_id"/>
-                            <field name="instructor_id"/>
-                        </group>
-                        <group>
-                            <field name="start_date"/>
-                            <field name="duration"/>
-                            <field name="seats"/>
-                            <field name="active" widget="boolean_toggle"/>
-                        </group>
+                        <field name="name"/>
+                        <field name="email"/>
+                        <field name="phone"/>
                     </group>
+                    <notebook>
+                        <page string="Sessions">
+                            <field name="session_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="course_id"/>
+                                    <field name="start_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
+    <!-- Partner Form Inherit (Instructor) -->
+    <record id="view_partner_form_inherit_instructor" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.instructor</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="before">
+                <field name="is_instructor"/>
+            </xpath>
+            <xpath expr="//page[last()]" position="after">
+                <page string="Sessions" invisible="not is_instructor">
+                    <field name="session_ids">
+                        <list>
+                            <field name="name"/>
+                            <field name="course_id"/>
+                            <field name="start_date"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
 
-
+    <!-- Actions -->
     <record id="action_academic_course" model="ir.actions.act_window">
         <field name="name">Courses</field>
         <field name="res_model">academic.course</field>
@@ -77,12 +139,25 @@
     <record id="action_academic_session" model="ir.actions.act_window">
         <field name="name">Sessions</field>
         <field name="res_model">academic.session</field>
-        <field name="view_mode">list,form</field>
-        <field name="view_id" ref="view_academic_session_tree"/>
+        <field name="view_mode">list,form,kanban,calendar,graph,pivot</field>
     </record>
 
+    <record id="action_academic_attendee" model="ir.actions.act_window">
+        <field name="name">Attendees</field>
+        <field name="res_model">academic.attendee</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menus -->
     <menuitem id="menu_academic_root" name="Academic" sequence="10"/>
-    
-    <menuitem id="menu_academic_course" name="Courses" parent="menu_academic_root" action="action_academic_course" sequence="10"/>
-    <menuitem id="menu_academic_session" name="Sessions" parent="menu_academic_root" action="action_academic_session" sequence="20"/>
+
+    <menuitem id="menu_academic_course" name="Courses"
+              parent="menu_academic_root"
+              action="action_academic_course" sequence="10"/>
+    <menuitem id="menu_academic_session" name="Sessions"
+              parent="menu_academic_root"
+              action="action_academic_session" sequence="20"/>
+    <menuitem id="menu_academic_attendee" name="Attendees"
+              parent="menu_academic_root"
+              action="action_academic_attendee" sequence="30"/>
 </odoo>

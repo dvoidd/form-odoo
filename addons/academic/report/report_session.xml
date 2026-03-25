@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Session Report Action -->
+    <record id="action_report_session" model="ir.actions.report">
+        <field name="name">Session Report</field>
+        <field name="model">academic.session</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">academic.report_session_template</field>
+        <field name="report_file">academic.report_session_template</field>
+        <field name="binding_model_id" ref="model_academic_session"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

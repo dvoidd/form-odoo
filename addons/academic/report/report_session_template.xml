@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_session_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Session: <span t-field="doc.name"/></h2>
+                        <div class="row mt-4 mb-4">
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Course</strong></td>
+                                        <td><span t-field="doc.course_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Instructor</strong></td>
+                                        <td><span t-field="doc.instructor_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Responsible</strong></td>
+                                        <td><span t-field="doc.responsible_id"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Start Date</strong></td>
+                                        <td><span t-field="doc.start_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>End Date</strong></td>
+                                        <td><span t-field="doc.end_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Duration</strong></td>
+                                        <td><span t-field="doc.duration"/> day(s)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <strong>Seats: </strong><span t-field="doc.seats"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Taken Seats: </strong><span t-field="doc.taken_seats"/>%
+                            </div>
+                        </div>
+
+                        <h3>Attendees</h3>
+                        <table class="table table-bordered" t-if="doc.attendee_ids">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.attendee_ids" t-as="attendee">
+                                    <tr>
+                                        <td><span t-esc="attendee_index + 1"/></td>
+                                        <td><span t-field="attendee.name"/></td>
+                                        <td><span t-field="attendee.email"/></td>
+                                        <td><span t-field="attendee.phone"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <p t-if="not doc.attendee_ids"><em>No attendees registered.</em></p>
+
+                        <div class="mt-4">
+                            <strong>Status: </strong>
+                            <span t-if="doc.state == 'draft'">Draft</span>
+                            <span t-if="doc.state == 'confirmed'">Confirmed</span>
+                            <span t-if="doc.state == 'done'">Done</span>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

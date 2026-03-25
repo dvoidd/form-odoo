@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard: Add Attendees to Single Session -->
+    <record id="view_create_attendee_wizard_form" model="ir.ui.view">
+        <field name="name">academic.create_attendee.wizard.form</field>
+        <field name="model">academic.create_attendee.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Attendees">
+                <group>
+                    <field name="session_id"/>
+                    <field name="attendee_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_add_attendees" type="object"
+                            string="Add Attendees" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_create_attendee_wizard" model="ir.actions.act_window">
+        <field name="name">Add Attendees</field>
+        <field name="res_model">academic.create_attendee.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Wizard: Add Attendees to Multiple Sessions -->
+    <record id="view_attendee_wizard_form" model="ir.ui.view">
+        <field name="name">academic.attendee.wizard.form</field>
+        <field name="model">academic.attendee.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Attendees to Sessions">
+                <group>
+                    <field name="session_ids" widget="many2many_tags"/>
+                    <field name="attendee_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_add_attendees" type="object"
+                            string="Add Attendees" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_attendee_wizard" model="ir.actions.act_window">
+        <field name="name">Add Attendees to Sessions</field>
+        <field name="res_model">academic.attendee.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu for Wizards -->
+    <menuitem id="menu_academic_wizard" name="Wizards"
+              parent="menu_academic_root" sequence="90"/>
+    <menuitem id="menu_create_attendee_wizard"
+              name="Add Attendees to Session"
+              parent="menu_academic_wizard"
+              action="action_create_attendee_wizard" sequence="10"/>
+    <menuitem id="menu_attendee_wizard"
+              name="Add Attendees to Multiple Sessions"
+              parent="menu_academic_wizard"
+              action="action_attendee_wizard" sequence="20"/>
+</odoo>

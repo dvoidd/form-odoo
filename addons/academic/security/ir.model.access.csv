@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_academic_course,academic.course,model_academic_course,base.group_user,1,1,1,1
-access_academic_session,academic.session,model_academic_session,base.group_user,1,1,1,1
+access_academic_course_user,academic.course.user,model_academic_course,base.group_user,1,1,1,1
+access_academic_session_user,academic.session.user,model_academic_session,base.group_user,1,1,1,1
+access_academic_attendee_user,academic.attendee.user,model_academic_attendee,base.group_user,1,1,1,1
+access_academic_create_attendee_wizard,academic.create_attendee.wizard,model_academic_create_attendee_wizard,base.group_user,1,1,1,1
+access_academic_attendee_wizard,academic.attendee.wizard,model_academic_attendee_wizard,base.group_user,1,1,1,1

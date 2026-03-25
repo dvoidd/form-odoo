@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_form_pelatihan,form.pelatihan,model_form_pelatihan,,1,1,1,1
+access_form_pelatihan_placement,form.pelatihan.placement,model_form_pelatihan_placement,,1,1,1,1
+access_form_pelatihan_vendor,form.pelatihan.vendor,model_form_pelatihan_vendor,,1,1,1,1
+access_form_pelatihan_jenis,form.pelatihan.jenis,model_form_pelatihan_jenis,,1,1,1,1

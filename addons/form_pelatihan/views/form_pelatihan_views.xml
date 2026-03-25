@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_pelatihan_form" model="ir.ui.view">
+        <field name="name">form.pelatihan.form</field>
+        <field name="model">form.pelatihan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+
+                    <button name="action_hod_approve" string="Approve HOD" type="object" class="oe_highlight" invisible="state != 'review_hod'" groups="form_pelatihan.group_hod,form_pelatihan.group_hr,form_pelatihan.group_fat,form_pelatihan.group_gm,form_pelatihan.group_direksi,base.group_system"/>
+
+                    <button name="action_hr_approve" string="Approve HR" type="object" class="oe_highlight" invisible="state != 'review_hr'" groups="form_pelatihan.group_hr,base.group_system"/>
+
+                    <button name="action_fat_approve" string="Approve FAT" type="object" class="oe_highlight" invisible="state != 'review_fat'" groups="form_pelatihan.group_fat,base.group_system"/>
+
+                    <button name="action_gm_approve" string="Approve GM" type="object" class="oe_highlight" invisible="state != 'review_gm'" groups="form_pelatihan.group_gm,base.group_system"/>
+
+                    <button name="action_direksi_approve" string="Approve Direksi" type="object" class="oe_highlight" invisible="state != 'review_direksi'" groups="form_pelatihan.group_direksi,base.group_system"/>
+
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state in ('draft', 'approved', 'rejected')" groups="form_pelatihan.group_hod,form_pelatihan.group_hr,form_pelatihan.group_fat,form_pelatihan.group_gm,form_pelatihan.group_direksi,base.group_system"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,review_hod,review_hr,review_fat,review_gm,review_direksi,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="department_id" readonly="state != 'draft'"/>
+                            <field name="placement_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="judul" readonly="state != 'draft'"/>
+                            <field name="vendor_id" readonly="state != 'draft'"/>
+                            <field name="jenis_id" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Proposal Pengajuan">
+                            <group>
+                                <field name="latar_belakang" readonly="state != 'draft'"/>
+                                <field name="tujuan" readonly="state != 'draft'"/>
+                            </group>
+
+                            <group string="Daftar Peserta" groups="form_pelatihan.group_hod,form_pelatihan.group_hr,form_pelatihan.group_fat,form_pelatihan.group_gm,form_pelatihan.group_direksi,base.group_system">
+                                <field name="peserta_ids" nolabel="1" domain="[('department_id', '=', department_id)]" readonly="state != 'draft'">
+                                    <list>
+                                        <field name="name" string="Nama Karyawan"/>
+                                        <field name="job_title" string="Jabatan"/>
+                                        <field name="department_id" string="Departemen"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Persetujuan Khusus" groups="form_pelatihan.group_hr,form_pelatihan.group_gm,form_pelatihan.group_direksi,base.group_system">
+                            <group>
+                                <group string="Project &amp; HR Section">
+                                    <field name="project_ho" readonly="state in ('approved', 'rejected')"/>
+                                    <field name="project_site" readonly="state in ('approved', 'rejected')"/>
+                                </group>
+                                <group string="Direksi Section">
+                                    <field name="direksi_approval" readonly="state != 'review_direksi'"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_form_pelatihan_list" model="ir.ui.view">
+        <field name="name">form.pelatihan.list</field>
+        <field name="model">form.pelatihan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="department_id"/>
+                <field name="judul"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state not in ('draft','approved','rejected')" decoration-success="state == 'approved'" decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_form_pelatihan" model="ir.actions.act_window">
+        <field name="name">Pengajuan Pelatihan</field>
+        <field name="res_model">form.pelatihan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_pelatihan_root" name="Pelatihan" sequence="10"/>
+    <menuitem id="menu_pelatihan_pengajuan" name="Pengajuan" parent="menu_pelatihan_root" action="action_form_pelatihan" sequence="1"/>
+    <menuitem id="menu_pelatihan_master" name="Master Data" parent="menu_pelatihan_root" sequence="100"/>
+    <menuitem id="menu_master_placement" name="Placement" parent="menu_pelatihan_master" action="action_master_placement"/>
+    <menuitem id="menu_master_vendor" name="Vendor" parent="menu_pelatihan_master" action="action_master_vendor"/>
+    <menuitem id="menu_master_jenis" name="Jenis Diklat" parent="menu_pelatihan_master" action="action_master_jenis"/>
+</odoo>

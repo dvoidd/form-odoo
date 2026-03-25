@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_course_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Course: <span t-field="doc.name"/></h2>
+                        <div class="row mt-4 mb-4">
+                            <div class="col-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Responsible</strong></td>
+                                        <td><span t-field="doc.responsible_id"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mb-4" t-if="doc.description">
+                            <h4>Description</h4>
+                            <p><span t-field="doc.description"/></p>
+                        </div>
+
+                        <h3>Sessions</h3>
+                        <table class="table table-bordered" t-if="doc.session_ids">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Session Name</th>
+                                    <th>Instructor</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Seats</th>
+                                    <th>Attendees</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.session_ids" t-as="session">
+                                    <tr>
+                                        <td><span t-esc="session_index + 1"/></td>
+                                        <td><span t-field="session.name"/></td>
+                                        <td><span t-field="session.instructor_id"/></td>
+                                        <td><span t-field="session.start_date"/></td>
+                                        <td><span t-field="session.end_date"/></td>
+                                        <td><span t-field="session.duration"/></td>
+                                        <td><span t-field="session.seats"/></td>
+                                        <td><span t-field="session.attendees_count"/></td>
+                                        <td>
+                                            <span t-if="session.state == 'draft'">Draft</span>
+                                            <span t-if="session.state == 'confirmed'">Confirmed</span>
+                                            <span t-if="session.state == 'done'">Done</span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <p t-if="not doc.session_ids"><em>No sessions available.</em></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

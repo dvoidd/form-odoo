@@ -1,49 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <data>
-
+        <!-- Session List/Tree View -->
         <record id="view_academic_session_tree" model="ir.ui.view">
             <field name="name">view_academic_session_tree</field>
             <field name="model">academic.session</field>
-            <field name="type">list</field>
             <field name="arch" type="xml">
-
-                <list string="session">
-                    <field name="name" />
-                    <field name="course_id" />
-                    <field name="instructor_id" />
-                    <field name="start_date" />
-                    <field name="duration" />
-                    <field name="seats" />
-                    <field name="active" />
+                <list string="Sessions"
+                      decoration-info="state=='draft'"
+                      decoration-success="state=='confirmed'"
+                      decoration-muted="state=='done'">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="instructor_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="duration"/>
+                    <field name="seats"/>
+                    <field name="attendees_count" string="Attendees"/>
+                    <field name="taken_seats" widget="progressbar"/>
+                    <field name="state"
+                           widget="badge"
+                           decoration-info="state == 'draft'"
+                           decoration-success="state == 'confirmed'"
+                           decoration-muted="state == 'done'"/>
                 </list>
-
             </field>
         </record>
+
+        <!-- Session Form View -->
         <record id="view_academic_session_form" model="ir.ui.view">
             <field name="name">view_academic_session_form</field>
             <field name="model">academic.session</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
-
-                <form string="session">
+                <form string="Session">
+                    <header>
+                        <button name="action_confirm" type="object"
+                                string="Confirm"
+                                class="btn-primary"
+                                invisible="state != 'draft'"/>
+                        <button name="action_done" type="object"
+                                string="Done"
+                                class="btn-primary"
+                                invisible="state != 'confirmed'"/>
+                        <button name="action_draft" type="object"
+                                string="Reset to Draft"
+                                invisible="state == 'draft'"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirmed,done"/>
+                    </header>
                     <sheet>
                         <group>
-                            <field name="name" />
-                            <field name="course_id" />
-                            <field name="instructor_id" />
-                            <field name="start_date" />
-                            <field name="duration" />
-                            <field name="seats" />
-                            <field name="active" />
+                            <group string="General">
+                                <field name="name"
+                                       readonly="state == 'done'"/>
+                                <field name="course_id"
+                                       readonly="state == 'done'"/>
+                                <field name="instructor_id"
+                                       readonly="state == 'done'"/>
+                                <field name="responsible_id"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                            <group string="Schedule">
+                                <field name="start_date"
+                                       readonly="state == 'done'"/>
+                                <field name="end_date"/>
+                                <field name="duration"
+                                       readonly="state == 'done'"/>
+                                <field name="seats"
+                                       readonly="state == 'done'"/>
+                                <field name="taken_seats" widget="progressbar"/>
+                            </group>
                         </group>
+                        <notebook>
+                            <page string="Attendees">
+                                <group>
+                                    <field name="attendees_count"/>
+                                </group>
+                                <field name="attendee_ids"
+                                       readonly="state == 'done'">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="email"/>
+                                        <field name="phone"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
-
             </field>
         </record>
 
+        <!-- Session Search View -->
+        <record id="view_academic_session_search" model="ir.ui.view">
+            <field name="name">view_academic_session_search</field>
+            <field name="model">academic.session</field>
+            <field name="arch" type="xml">
+                <search string="Search Sessions">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="instructor_id"/>
+                    <filter name="filter_draft" string="Draft"
+                            domain="[('state', '=', 'draft')]"/>
+                    <filter name="filter_confirmed" string="Confirmed"
+                            domain="[('state', '=', 'confirmed')]"/>
+                    <filter name="filter_done" string="Done"
+                            domain="[('state', '=', 'done')]"/>
+                    <separator/>
+                    <filter name="filter_active" string="Active"
+                            domain="[('active', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_course" string="Course"
+                                context="{'group_by': 'course_id'}"/>
+                        <filter name="group_by_instructor" string="Instructor"
+                                context="{'group_by': 'instructor_id'}"/>
+                        <filter name="group_by_state" string="Status"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Session Calendar View -->
+        <record id="view_academic_session_calendar" model="ir.ui.view">
+            <field name="name">view_academic_session_calendar</field>
+            <field name="model">academic.session</field>
+            <field name="arch" type="xml">
+                <calendar string="Sessions" date_start="start_date"
+                          date_stop="end_date" color="course_id">
+                    <field name="name"/>
+                    <field name="instructor_id"/>
+                    <field name="seats"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Session Graph View -->
+        <record id="view_academic_session_graph" model="ir.ui.view">
+            <field name="name">view_academic_session_graph</field>
+            <field name="model">academic.session</field>
+            <field name="arch" type="xml">
+                <graph string="Sessions">
+                    <field name="course_id"/>
+                    <field name="attendees_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Session Kanban View (Section 17) -->
+        <record id="view_academic_session_kanban" model="ir.ui.view">
+            <field name="name">view_academic_session_kanban</field>
+            <field name="model">academic.session</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="instructor_id"/>
+                    <field name="taken_seats"/>
+                    <field name="attendees_count"/>
+                    <field name="state"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="card">
+                            <field name="name" class="fw-bold fs-5"/>
+                            <field name="course_id"/>
+                            <field name="instructor_id"/>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span>Attendees: <field name="attendees_count"/></span>
+                                <span>Seats: <field name="taken_seats"/>%</span>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <!-- Session Pivot View (Section 22 - Dashboard) -->
+        <record id="view_academic_session_pivot" model="ir.ui.view">
+            <field name="name">view_academic_session_pivot</field>
+            <field name="model">academic.session</field>
+            <field name="arch" type="xml">
+                <pivot string="Sessions Analysis">
+                    <field name="course_id" type="row"/>
+                    <field name="state" type="col"/>
+                    <field name="attendees_count" type="measure"/>
+                    <field name="seats" type="measure"/>
+                    <field name="duration" type="measure"/>
+                </pivot>
+            </field>
+        </record>
     </data>
-
-
 </odoo>
